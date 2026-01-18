@@ -20,15 +20,34 @@ export const resolvers = {
         }
     },
     Mutation : {
-        createJob : (_root, {input: {title, description}}) => {
-            const companyId = "FjcJCHJALA4i"; // TODO value should be based on user.
-            return createJob({companyId, title, description});
+        createJob : (_root, {input: {title, description}}, {user}) => {
+            if(!user){
+                authorizationErrorHandler("No authenication recieved.");
+            } else {
+                const companyId = user.companyId;
+                return createJob({companyId, title, description});
+            }
         },
-        deleteJob : (_root, {id}) => {
-            return deleteJob(id);
+        deleteJob : async (_root, {id}, {user}) => {
+            if(!user) authorizationErrorHandler("Missing Authentication.");
+
+            const job = await deleteJob(id, user.companyId);
+
+            if(!job) errorHandler("No job found with id : " + id);
+
+            return job;
         },
-        updateJob: (_root, {id, title,description}) => {
-            return updateJob({id, title, description});
+        updateJob: async (_root,  {input: {id, title,description}}, {user}) => {
+            if(!user) authorizationErrorHandler("Missing Authentication.");
+
+            const job = await updateJob({id, title, description, companyId: user.companyId});
+
+            // console.log("job= ", job);
+
+            
+            if(!job) errorHandler("No job found with id : " + id);
+
+            return job;
         }
     },
     Company: {
@@ -47,4 +66,9 @@ function errorHandler(message){
     throw new GraphQLError(message, {
                     extensions: {code: 'NOT_FOUND'}
                 })
+}
+function authorizationErrorHandler(message){
+    throw new GraphQLError(message, {
+        extensions: {code: 'NO_AUTHORIZATION'}
+    })
 }
