@@ -1,4 +1,4 @@
-import { createJob, getJob, getJobs, getJobsByCompany } from "./db/jobs.js"
+import { createJob, deleteJob, getJob, getJobs, getJobsByCompany, updateJob } from "./db/jobs.js"
 import {GraphQLError } from 'graphql'
 import { getCompany } from "./db/companies.js"
 export const resolvers = {
@@ -23,10 +23,16 @@ export const resolvers = {
         createJob : (_root, {input: {title, description}}) => {
             const companyId = "FjcJCHJALA4i"; // TODO value should be based on user.
             return createJob({companyId, title, description});
-        } 
+        },
+        deleteJob : (_root, {id}) => {
+            return deleteJob(id);
+        },
+        updateJob: (_root, {id, title,description}) => {
+            return updateJob({id, title, description});
+        }
     },
     Company: {
-        jobs: (company)=> getJobsByCompany(company.id)
+        jobs: (company)=> getJobsByCompany(company.id) 
     },
     Job: {
         company: (job) => getCompany(job.companyId),
