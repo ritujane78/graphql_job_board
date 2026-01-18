@@ -3,6 +3,9 @@
         job(id: ID!): Job
         company(id: ID!): Company
     }
+    type Mutation {
+        createJob(input: CreateJobInput!): Job
+    }
 
     type Company {
         id: ID!
@@ -17,5 +20,9 @@
         """ This is __date__ documentation."""
         date: String!
         company: Company!
+        description:String!
+    }
+    input CreateJobInput {
+        title: String!
         description:String!
     }

@@ -1,4 +1,4 @@
-import { getJob, getJobs, getJobsByCompany } from "./db/jobs.js"
+import { createJob, getJob, getJobs, getJobsByCompany } from "./db/jobs.js"
 import {GraphQLError } from 'graphql'
 import { getCompany } from "./db/companies.js"
 export const resolvers = {
@@ -18,6 +18,12 @@ export const resolvers = {
             }
             return company;
         }
+    },
+    Mutation : {
+        createJob : (_root, {input: {title, description}}) => {
+            const companyId = "FjcJCHJALA4i"; // TODO value should be based on user.
+            return createJob({companyId, title, description});
+        } 
     },
     Company: {
         jobs: (company)=> getJobsByCompany(company.id)
