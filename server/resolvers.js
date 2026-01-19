@@ -54,7 +54,7 @@ export const resolvers = {
         jobs: (company)=> getJobsByCompany(company.id) 
     },
     Job: {
-        company: (job) => getCompany(job.companyId),
+        company: (job, args, {companyLoader}) => companyLoader.load(job.companyId),
         date: (job) => toIsoDate(job.createdAt)
     }
 }

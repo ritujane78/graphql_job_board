@@ -53,14 +53,6 @@ export const companyQuery = gql`
         }
 `;
 
-export const createJobMutation = gql `
-  mutation ($input: CreateJobInput!) {
-    job: createJob(input : $input) {
-        ...jobDetail
-    }
-  }
-  ${jobDetailFragment}   
-`;
 
 const jobDetailFragment = gql`
     fragment jobDetail on Job {
@@ -74,7 +66,15 @@ const jobDetailFragment = gql`
         title
         date
     }
-`
+`;
+export const createJobMutation = gql `
+  mutation ($input: CreateJobInput!) {
+    job: createJob(input : $input) {
+        ...jobDetail
+    }
+  }
+  ${jobDetailFragment}   
+`;
 export const jobByIdQuery = gql`
     query JobById($id : ID!){
         job (id: $id) {
