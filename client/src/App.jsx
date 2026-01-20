@@ -48,7 +48,7 @@ function App() {
           />
         </Routes>
       </main>
-</   ApolloProvider>
+</ApolloProvider>
     </>
   );
 }
